@@ -14,29 +14,39 @@ if ($_POST) {
     $login = $_POST['login'] ?? null;
     $senha = $_POST['senha'] ?? null;
     if ($login & $senha) {
-        $_SESSION['login'] = $login;
-
         $key = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $senha = sodium_crypto_secretbox($senha, $nonce, $key);
         $senha = bin2hex($senha);
-        $_SESSION['senha'] = $senha;
+        $_SESSION['login'] = array("login"=>$login, "senha"=>$senha);
 
         echo "<script>location.href='index.php'</script>";
     }
 }
 ?>
-
-<div>
+<html lang="en">
+<head>
+  <title>Trabalho</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<div class="container">
     <h1 style='text-align: center;'>Cadastro Login</h1>
     <form method="POST" style='text-align: center;'>
         <label for="login">Login</label>
         <input type="text" name="login" id="login" class="form-control" placeholder="Login">
 
+        <br>
+
         <label for="senha">Senha:</label>
         <input type="password" name="senha" id="senha" class="form-control" placeholder="Senha">
+        <br>
 
-        <button type="submit" class="btn btn-success w-100">Efetuar login</button>
+        <button type="submit" class="btn btn-primary">Efetuar login</button>
 
 
     </form>
@@ -56,17 +66,24 @@ session_start();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>Trabalho</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+    <div class="container">
     <h1>Cadastro de Login</h1>
-    <?php
-    print_r($_SESSION);
-    ?>
-    <a href="login.php">Voltar</a>
+        <ul class="list-group">
+            <li class="list-group-item">login: <?=$_SESSION['login']['login']?></li>
+            <li class="list-group-item">senha: <?=$_SESSION['login']['senha']?></li>
+        </ul>
+        <a href="login.php" type="button" class="btn btn-secondary">Voltar</a>
+    </div>
 </body>
+
 </html>
 ~~~~
